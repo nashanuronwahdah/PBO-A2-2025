@@ -116,39 +116,60 @@ class Transaksi:
       return 0
     return hari_terlambat * (tarif_harian * 1.2)
 
-# Pengujian Static Method
-print("=== UJI STATIC METHOD ===")
-denda = Transaksi.hitung_denda(hari_terlambat=2, tarif_harian=300000)
-print(f"Denda Keterlambatan (2 Hari): Rp {denda:,.0f}")
 
-# Pengujian Class Method
-print("\n=== UJI CLASS METHOD ===")
-data_mobil_dict = {
+#Uji Programm
+#Membuat 2 objek per class
+#2 Objek Mobil
+mobil1 = Mobil("M01", "Ferrari", "Roma", "KT 1234 AB", 300000)
+data_mobil2 = {
     "id_mobil": "M02",
     "merk": "Lamborjini",
     "model": "Diablo",
     "plat_nomor": "KT 6969 CD",
     "harga_sewa": 500000,
 }
+mobil2 = Mobil.buat_dari_dict(data_mobil2) 
 
-mobil2 = Mobil.buat_dari_dict(data_mobil_dict)
-print(mobil2.tampilkan_detail())
+#2 Objek Pelanggan
+pelanggan1 = Pelanggan("P01", "Bakil", "08123456789", "6471012345678901")
+pelanggan2 = Pelanggan("P02", "Budi", "08987654321", "6471098765432100") 
 
+#2 Objek Transaksi
+transaksi1 = Transaksi("TRX01", pelanggan1, mobil1, 3)
+transaksi2 = Transaksi("TRX02", pelanggan2, mobil2, 2)  
+
+#Ngetes Methodd
+print("===Ngetes Metod===")
+#instance method
+print("Profil Pelanggan :", pelanggan1.tampilkan_profil())  
+print("Status Mobil Awal:", mobil1.tampilkan_detail())  
+print(f"Total Biaya Sewa : Rp {transaksi1.total_biaya:,}")
+
+#class method
 Pelanggan.ubah_nama_instansi("Rental Tam Hitam Samarinda")
 print("Nama Instansi Baru:", Pelanggan.nama_instansi)
 
-# Pengujian Instance Method Alur Utama
-print("\n=== UJI INSTANCE METHOD & TRANSAKSI ===")
-mobil1 = Mobil("M01", "Ferrari", "Roma", "KT 1234 AB", 300000)
-pelanggan1 = Pelanggan("P01", "Bakil", "08123456789", "6471012345678901")
+#class method
+denda = Transaksi.hitung_denda(hari_terlambat=2, tarif_harian=300000)
+print(f"Denda Keterlambatan (2 Hari): Rp {denda:,.0f}")
 
-transaksi1 = Transaksi("TRX01", pelanggan1, mobil1, 3)
-
-print("Profil Pelanggan :", pelanggan1.tampilkan_profil())
-print("Status Mobil Awal:", mobil1.tampilkan_detail())
-print(f"Total Biaya Sewa : Rp {transaksi1.total_biaya:,}")
-
-# kembali
 print("\n--- Proses Pengembalian ---")
 print(transaksi1.proses_pengembalian())
 print("Status Mobil Akhir:", mobil1.tampilkan_detail())
+
+#Uji Validasi Setter
+print("\n=== UJI VALIDASI SETTER ===")
+# Input Valid
+mobil1.harga_sewa_per_hari = 400000
+print(f"Harga sewa baru (Valid)  : Rp {mobil1.harga_sewa_per_hari:,}")
+
+# Input Invalid
+try:
+  mobil1.harga_sewa_per_hari = -50000
+except ValueError as e:
+  print(f"Uji Invalid Harga Sewa : Ditolak! ({e})")
+
+try:
+  pelanggan1.no_ktp = "ABC123"
+except ValueError as e:
+  print(f"Uji Invalid No KTP     : Ditolak! ({e})")
